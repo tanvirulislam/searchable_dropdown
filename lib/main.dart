@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:searchable_dropdown/searchable.dropdown/overlay.entry.dart';
+import 'package:searchable_dropdown/searchable.dropdown/searchable.dropdown.dart.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
