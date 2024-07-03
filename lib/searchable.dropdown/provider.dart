@@ -18,11 +18,15 @@ final itemSearchProvider =
 
 class SearchItemsNotifier
     extends FamilyNotifier<List<RequisitionItem>?, String> {
+  List<RequisitionItem>? items = [];
   @override
-  build(arg) => dummyRequisitionItems;
+  build(arg) {
+    items = dummyRequisitionItems;
+    return dummyRequisitionItems;
+  }
 
   void onSearch(String value) {
-    state = dummyRequisitionItems
+    state = items!
         .map((item) => item.copyWith(
                 options: item.options?.where((option) {
               return option.itemName!

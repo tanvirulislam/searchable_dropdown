@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:searchable_dropdown/searchable.dropdown/provider.dart';
 
-OverlayEntry? overlayEntry;
-final GlobalKey textFieldKey = GlobalKey();
-
 class SearchableDropdown extends ConsumerWidget {
   const SearchableDropdown({
     super.key,
@@ -22,6 +19,8 @@ class SearchableDropdown extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    OverlayEntry? overlayEntry;
+    final GlobalKey textFieldKey = GlobalKey();
     final isOverlayVisible = ref.watch(isOverlayVisibleProvider);
     final isOverlayVisibleNotifier =
         ref.watch(isOverlayVisibleProvider.notifier);
