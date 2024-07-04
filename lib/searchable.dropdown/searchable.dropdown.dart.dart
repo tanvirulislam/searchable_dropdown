@@ -21,9 +21,10 @@ class SearchableDropdown extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     OverlayEntry? overlayEntry;
     final GlobalKey textFieldKey = GlobalKey();
-    final isOverlayVisible = ref.watch(isOverlayVisibleProvider);
+    final isOverlayVisible =
+        ref.watch(isOverlayVisibleProvider(providerTag ?? ''));
     final isOverlayVisibleNotifier =
-        ref.watch(isOverlayVisibleProvider.notifier);
+        ref.watch(isOverlayVisibleProvider(providerTag ?? '').notifier);
 
     void hideOverlay() {
       if (overlayEntry != null) {
@@ -115,7 +116,9 @@ class SearchableDropdown extends ConsumerWidget {
           decoration: InputDecoration(
             hintText: hintText ?? 'Select an item',
             errorStyle: const TextStyle(height: 0),
-            suffixIcon: const Icon(Icons.keyboard_arrow_down),
+            suffixIcon: isOverlayVisible == false
+                ? const Icon(Icons.keyboard_arrow_down)
+                : const Icon(Icons.keyboard_arrow_up),
             errorBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.red),
             ),
@@ -139,7 +142,6 @@ double calculateOverlayHeight(
   if (overlayHeight + maxHeight > screenHeight) {
     overlayHeight = screenHeight - maxHeight;
   }
-
   return overlayHeight;
 }
 
@@ -175,55 +177,37 @@ class OverlayContent extends ConsumerWidget {
             onChanged: (value) => searchItemsNotifier.onSearch(value),
           ),
         ),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 250),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ...searchItems?.map((requisitionItem) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 8),
-                              child: Text(
-                                requisitionItem.groupName ?? '',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blueGrey,
-                                ),
-                              ),
-                            ),
-                            ...requisitionItem.options?.map((option) {
-                                  return SizedBox(
-                                    width: double.maxFinite,
-                                    child: InkWell(
-                                      onTap: () {
-                                        onChanged(option.itemName);
-                                        hideOverlay();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 16,
-                                          bottom: 4,
-                                          top: 4,
-                                          right: 8,
-                                        ),
-                                        child: Text(option.itemName ?? ''),
-                                      ),
-                                    ),
-                                  );
-                                }) ??
-                                [],
-                          ],
-                        )) ??
-                    [],
-              ],
+        if (searchItems == null || searchItems.isEmpty)
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text("No items found"),
+          )
+        else
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 250),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ...searchItems.map((value) => SizedBox(
+                        width: double.maxFinite,
+                        child: InkWell(
+                          onTap: () {
+                            onChanged(value);
+                            hideOverlay();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Text(value),
+                          ),
+                        ),
+                      ))
+                ],
+              ),
             ),
           ),
-        ),
       ],
     );
   }

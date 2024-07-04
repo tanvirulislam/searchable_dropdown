@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:searchable_dropdown/searchable.dropdown/searchable.dropdown.dart.dart';
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
             children: [
               SearchableDropdown(
                 initialValue: '',
-                onChanged: (value) => print(value),
+                onChanged: (value) => log(value.toString()),
                 providerTag: "providerTag1",
               ),
             ],
@@ -32,3 +34,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+var height = const SizedBox(height: 10);
