@@ -16,11 +16,16 @@ final itemSearchProvider =
         SearchItemsNotifier.new);
 
 class SearchItemsNotifier extends FamilyNotifier<List<String>?, String> {
-  List<String>? items = [];
+  List<String>? items;
+
   @override
-  build(arg) {
-    items = itemList;
-    return itemList;
+  build(arg) => items;
+
+  void initializeItems(List<String> initialItems) {
+    if (state == null) {
+      items = initialItems;
+      state = items;
+    }
   }
 
   void onSearch(String value) {
@@ -40,16 +45,3 @@ class TECProvider extends FamilyNotifier<TextEditingController, String> {
   @override
   TextEditingController build(String arg) => TextEditingController();
 }
-
-List<String> itemList = [
-  "apple",
-  "orange",
-  "banana",
-  "jackfruit",
-  "lemon",
-  "Apple",
-  "mango",
-  "Guava",
-  "watermelon"
-];
-// List<String> itemList = [];

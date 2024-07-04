@@ -8,11 +8,11 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -20,12 +20,13 @@ class MyApp extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            // mainAxisAlignment: MainAxisAlignment.end,
             children: [
               SearchableDropdown(
                 initialValue: '',
                 onValueChanged: (value) => log(value.toString()),
                 providerTag: "providerTag1",
+                items: itemList,
               ),
             ],
           ),
@@ -35,4 +36,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
+List<String> itemList = [
+  "apple",
+  "orange",
+  "banana",
+  "jackfruit",
+  "lemon",
+  "Apple",
+  "mango",
+  "Guava",
+  "watermelon"
+];
 var height = const SizedBox(height: 10);

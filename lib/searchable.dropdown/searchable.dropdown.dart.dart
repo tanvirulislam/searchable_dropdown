@@ -10,21 +10,31 @@ class SearchableDropdown extends ConsumerWidget {
     required this.onValueChanged,
     required this.providerTag,
     this.hintText,
+    required this.items,
+    this.width,
   });
   final bool useValidator;
   final String? initialValue;
   final ValueChanged<String?> onValueChanged;
   final String? providerTag;
   final String? hintText;
+  final List<String> items;
+  final double? width;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     OverlayEntry? overlayEntry;
     final GlobalKey textFieldKey = GlobalKey();
+
     final isOverlayVisible =
         ref.watch(isOverlayVisibleProvider(providerTag ?? ''));
     final isOverlayVisibleNotifier =
         ref.watch(isOverlayVisibleProvider(providerTag ?? '').notifier);
+    Future(() {
+      ref
+          .read(itemSearchProvider(providerTag ?? '').notifier)
+          .initializeItems(items);
+    });
 
     void hideOverlay() {
       if (overlayEntry != null) {
@@ -98,34 +108,35 @@ class SearchableDropdown extends ConsumerWidget {
       }
     }
 
-    return Column(
-      children: [
-        TextFormField(
-          key: textFieldKey,
-          initialValue: initialValue,
-          readOnly: true,
-          onTap: () => toggleOverlay(context, textFieldKey),
-          validator: useValidator == true
-              ? (value) {
-                  if (value == null || value.isEmpty) {
-                    return "This field can't be empty";
-                  }
-                  return null;
+    return SizedBox(
+      width: width ?? 300,
+      child: TextFormField(
+        key: textFieldKey,
+        initialValue: initialValue,
+        readOnly: true,
+        onTap: () => toggleOverlay(context, textFieldKey),
+        validator: useValidator == true
+            ? (value) {
+                if (value == null || value.isEmpty) {
+                  return "This field can't be empty";
                 }
-              : null,
-          decoration: InputDecoration(
-            hintText: hintText ?? 'Select an item',
-            errorStyle: const TextStyle(height: 0),
-            suffixIcon: isOverlayVisible == false
-                ? const Icon(Icons.keyboard_arrow_down)
-                : const Icon(Icons.keyboard_arrow_up),
-            errorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red),
-            ),
-            border: const OutlineInputBorder(),
+                return null;
+              }
+            : null,
+        decoration: InputDecoration(
+          hintText: hintText ?? 'Select an item',
+          errorStyle: const TextStyle(height: 0),
+          suffixIcon: isOverlayVisible == false
+              ? const Icon(Icons.keyboard_arrow_down)
+              : const Icon(Icons.keyboard_arrow_up),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey.shade300)),
+          errorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
           ),
+          border: const OutlineInputBorder(),
         ),
-      ],
+      ),
     );
   }
 }
@@ -170,7 +181,7 @@ class OverlayContent extends ConsumerWidget {
           child: TextFormField(
             controller: ref.watch(tecProvider(providerTag ?? '')),
             decoration: const InputDecoration(
-              hintText: 'Search items...',
+              hintText: 'Search...',
               border: OutlineInputBorder(),
             ),
             autofocus: true,
@@ -180,7 +191,7 @@ class OverlayContent extends ConsumerWidget {
         if (searchItems == null || searchItems.isEmpty)
           const Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text("No items found"),
+            child: Text("No data found"),
           )
         else
           ConstrainedBox(
