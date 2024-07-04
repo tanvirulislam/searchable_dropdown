@@ -30,6 +30,8 @@ class SearchableDropdown extends ConsumerWidget {
         overlayEntry?.remove();
         overlayEntry = null;
         isOverlayVisibleNotifier.onToggle();
+        ref.invalidate(tecProvider);
+        ref.invalidate(itemSearchProvider);
       }
     }
 
@@ -40,8 +42,11 @@ class SearchableDropdown extends ConsumerWidget {
       var size = renderBox.size;
       var offset = renderBox.localToGlobal(Offset.zero);
       var screenHeight = MediaQuery.of(context).size.height;
-      var overlayHeight =
-          calculateOverlayHeight(screenHeight, offset.dy, size.height);
+      var overlayHeight = calculateOverlayHeight(
+        screenHeight,
+        offset.dy,
+        size.height,
+      );
 
       return OverlayEntry(
         builder: (context) => GestureDetector(

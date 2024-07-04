@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            // mainAxisAlignment: MainAxisAlignment.end,
             children: [
               SearchableDropdown(
                 initialValue: '',
