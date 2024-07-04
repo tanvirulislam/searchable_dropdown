@@ -7,13 +7,13 @@ class SearchableDropdown extends ConsumerWidget {
     super.key,
     this.useValidator = true,
     required this.initialValue,
-    required this.onChanged,
+    required this.onValueChanged,
     required this.providerTag,
     this.hintText,
   });
   final bool useValidator;
   final String? initialValue;
-  final ValueChanged<String?> onChanged;
+  final ValueChanged<String?> onValueChanged;
   final String? providerTag;
   final String? hintText;
 
@@ -68,7 +68,7 @@ class SearchableDropdown extends ConsumerWidget {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: OverlayContent(
                       providerTag: providerTag,
-                      onChanged: onChanged,
+                      onValueChanged: onValueChanged,
                       hideOverlay: hideOverlay,
                     ),
                   ),
@@ -149,12 +149,12 @@ class OverlayContent extends ConsumerWidget {
   const OverlayContent({
     super.key,
     required this.providerTag,
-    required this.onChanged,
+    required this.onValueChanged,
     required this.hideOverlay,
   });
 
   final String? providerTag;
-  final ValueChanged<String?> onChanged;
+  final ValueChanged<String?> onValueChanged;
   final VoidCallback hideOverlay;
 
   @override
@@ -194,7 +194,7 @@ class OverlayContent extends ConsumerWidget {
                         width: double.maxFinite,
                         child: InkWell(
                           onTap: () {
-                            onChanged(value);
+                            onValueChanged(value);
                             hideOverlay();
                           },
                           child: Padding(

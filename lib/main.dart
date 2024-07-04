@@ -20,11 +20,11 @@ class MyApp extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               SearchableDropdown(
                 initialValue: '',
-                onChanged: (value) => log(value.toString()),
+                onValueChanged: (value) => log(value.toString()),
                 providerTag: "providerTag1",
               ),
             ],
